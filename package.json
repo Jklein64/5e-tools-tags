@@ -1,0 +1,57 @@
+{
+	"name": "5e_tools_tags",
+	"displayName": "5e.tools Tags",
+	"description": "Styles all tags compatible with 5e.tools JSON located in JSON and YAML files.",
+	"version": "0.0.1",
+	"publisher": "Jklein64",
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.32.0"
+	},
+	"repository": {},
+	"categories": [
+		"Themes"
+	],
+	"keywords": [
+		"5e.tools",
+		"5etools",
+		"5e",
+		"tags"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"configuration": {
+			"title": "5e.tools Tags",
+			"properties": {
+				"colors": {
+					"type": "object",
+					"default": {
+						"asterisks": "#56B6C2",
+						"bracesAndPipes": "#ABB2BF",
+						"tags": "#C678DD",
+						"content": "#E5C07B",
+						"sources": "#61AFEF"
+					},
+					"description": "The colors to use when marking up tags."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint . --ext .ts,.tsx",
+		"watch": "tsc -watch -p ./"
+	},
+	"devDependencies": {
+		"@types/node": "^12.12.0",
+		"@typescript-eslint/eslint-plugin": "^3.0.2",
+		"@typescript-eslint/parser": "^3.0.2",
+		"eslint": "^7.1.0",
+		"typescript": "^3.9.4",
+		"@types/vscode": "^1.32.0"
+	}
+}

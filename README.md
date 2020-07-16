@@ -9,8 +9,6 @@ A simple extension that changes the color of "tags" used for creating content fo
 -   `{@tag content|source|chapter}`
 -   `{@tag content|source|chapter}*`
 
-## Configuration
-
 ## Examples
 
 ![Example](./images/example1.png)

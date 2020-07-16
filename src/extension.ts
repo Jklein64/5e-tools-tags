@@ -34,6 +34,13 @@ export function activate(context: vscode.ExtensionContext) {
     const sourceType = createType(colors.sources);
     const asteriskType = createType(colors.asterisks);
 
+    const matchRegEx = new RegExp(`\\{(${tagsList.join('|')})[^}]*\\}\\**`, 'g');
+    const asteriskRegEx = /(\*)+/g;
+    const braceOrPipeRegEx = /\{|\||\}/g;
+    const tagsRegEx = /@[a-z|A-Z|0-9]*/g;
+    const contentRegEx = /(?<=@[a-z|A-Z|0-9]*\s)[^|^}]*/g;
+    const sourcesRegEx = /(?<=\|)[^}|^|]*/g;
+
     let activeEditor = vscode.window.activeTextEditor;
 
     function updateDecorations() {
@@ -41,33 +48,33 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        console.log(
-            `Languages in config: ${languages?.toString()}`,
-            `language of file: ${activeEditor.document.languageId}`
-        );
+        // console.log(
+        //     `Languages in config: ${languages?.toString()}`,
+        //     `language of file: ${activeEditor.document.languageId}`
+        // );
+
         if (languages && !languages.includes(activeEditor.document.languageId)) {
             return;
         }
 
         const text = activeEditor.document.getText();
 
-        const matches: decorationWithText[] = [];
-        for (const atTag of tagsList) {
-            const tagRegEx = new RegExp(`\\{${atTag}[^}]*\\}\\**`, 'g');
-            let match = undefined;
-            while ((match = tagRegEx.exec(text))) {
-                const startPos = activeEditor.document.positionAt(match.index);
-                const endPos = activeEditor.document.positionAt(match.index + match[0].length);
-                const range = { range: new vscode.Range(startPos, endPos) };
-                matches.push({ deco: range, text: match[0] });
-            }
+        const wholeMatches: decorationWithText[] = [];
+
+        const matches = text.matchAll(matchRegEx);
+        for (const match of matches) {
+            if (match.index === undefined) continue;
+            const startPos = activeEditor.document.positionAt(match.index);
+            const endPos = activeEditor.document.positionAt(match.index + match[0].length);
+            const range = { range: new vscode.Range(startPos, endPos) };
+            wholeMatches.push({ deco: range, text: match[0] });
         }
 
-        const asterisks = matchStuff(matches, /(\*)+/g);
-        const bracesAndPipes = matchStuff(matches, /\{|\||\}/g);
-        const tags = matchStuff(matches, /@[a-z|A-Z]*/g);
-        const content = matchStuff(matches, /(?<=@[a-z|A-Z]*\s)[^|^}]*/g);
-        const sources = matchStuff(matches, /(?<=\|)[^}|^|]*/g);
+        const asterisks = matchStuff(wholeMatches, asteriskRegEx);
+        const bracesAndPipes = matchStuff(wholeMatches, braceOrPipeRegEx);
+        const tags = matchStuff(wholeMatches, tagsRegEx);
+        const content = matchStuff(wholeMatches, contentRegEx);
+        const sources = matchStuff(wholeMatches, sourcesRegEx);
 
         activeEditor.setDecorations(tagType, tags);
         activeEditor.setDecorations(sourceType, sources);
@@ -119,15 +126,15 @@ function createType(color: string, args?: Record<string, unknown>) {
 
 function matchStuff(matches: decorationWithText[], regex: RegExp) {
     const arr: vscode.DecorationOptions[] = [];
-    matches.forEach((match) => {
-        let temp = undefined;
-        while ((temp = regex.exec(match.text)))
-            arr.push({
-                range: new vscode.Range(
-                    match.deco.range.start.translate(undefined, temp.index),
-                    match.deco.range.start.translate(undefined, temp.index + temp[0].length)
-                ),
-            });
-    });
+    for (const whole of matches) {
+        const subMatches = whole.text.matchAll(regex);
+        const matchStart = whole.deco.range.start;
+        for (const subMatch of subMatches) {
+            if (subMatch.index === undefined) continue;
+            const startPos = matchStart.translate(undefined, subMatch.index);
+            const endPos = matchStart.translate(undefined, subMatch.index + subMatch[0].length);
+            arr.push({ range: new vscode.Range(startPos, endPos) });
+        }
+    }
     return arr;
 }

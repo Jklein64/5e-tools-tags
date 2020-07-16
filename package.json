@@ -4,7 +4,7 @@
     "description": "Styles tags compatible with 5e.tools JSON.",
     "icon": "images/5e-tools-logo.png",
     "version": "0.0.1",
-    "publisher": "Jklein64",
+    "publisher": "Tree",
     "license": "MIT",
     "engines": {
         "vscode": "^1.32.0"
@@ -23,7 +23,8 @@
         "tags"
     ],
     "activationEvents": [
-        "*"
+        "onLanguage:json",
+        "onLanguage:yaml"
     ],
     "main": "./out/extension.js",
     "contributes": {

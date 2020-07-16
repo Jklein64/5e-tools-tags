@@ -1,16 +1,20 @@
 {
-    "name": "5etoolstags",
+    "name": "5e-tools-tags",
     "displayName": "5e.tools Tags",
-    "description": "Styles all tags compatible with 5e.tools JSON located in JSON and YAML files.",
+    "description": "Styles tags compatible with 5e.tools JSON.",
+    "icon": "images/5e-tools-logo.png",
     "version": "0.0.1",
     "publisher": "Jklein64",
     "license": "MIT",
     "engines": {
         "vscode": "^1.32.0"
     },
-    "repository": {},
+    "repository": {
+        "url": "https://github.com/Jklein64/5e-tools-tags.git"
+    },
     "categories": [
-        "Themes"
+        "Themes",
+        "Programming Languages"
     ],
     "keywords": [
         "5e.tools",
@@ -26,7 +30,7 @@
         "configuration": {
             "title": "5e.tools Tags",
             "properties": {
-                "colors": {
+                "5e-tools-tags.colors": {
                     "type": "object",
                     "default": {
                         "asterisks": "#56B6C2",
@@ -37,12 +41,12 @@
                     },
                     "description": "The colors to use when marking up tags."
                 },
-                "languageIDs": {
+                "5e-tools-tags.languageIDs": {
                     "type": "array",
                     "default": [
                         "json"
                     ],
-                    "description": "The languages to highlight the tags for."
+                    "description": "The IDs of the languages to highlight the tags for."
                 }
             }
         }

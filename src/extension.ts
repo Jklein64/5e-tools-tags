@@ -13,9 +13,11 @@ type colorsConfig = {
 export function activate(context: vscode.ExtensionContext) {
     let timeout: NodeJS.Timer | undefined = undefined;
 
-    let colors = vscode.workspace.getConfiguration().get<colorsConfig>('colors');
+    let colors = vscode.workspace.getConfiguration().get<colorsConfig>('5e-tools-tags.colors');
 
-    const languages = vscode.workspace.getConfiguration().get<string[]>('languageIDs');
+    const languages = vscode.workspace
+        .getConfiguration()
+        .get<string[]>('5e-tools-tags.languageIDs');
 
     if (!colors)
         colors = {
@@ -39,6 +41,10 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
+        console.log(
+            `Languages in config: ${languages?.toString()}`,
+            `language of file: ${activeEditor.document.languageId}`
+        );
         if (languages && !languages.includes(activeEditor.document.languageId)) {
             return;
         }

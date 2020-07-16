@@ -1,5 +1,5 @@
 {
-	"name": "5e_tools_tags",
+	"name": "5etoolstags",
 	"displayName": "5e.tools Tags",
 	"description": "Styles all tags compatible with 5e.tools JSON located in JSON and YAML files.",
 	"version": "0.0.1",

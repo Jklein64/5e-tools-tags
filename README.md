@@ -21,6 +21,7 @@ This is a list of all tags that can be used properly with [5e.tools](https://5e.
 `@5etools`
 `@action`
 `@adventure`
+`@area`
 `@atk`
 `@b`
 `@background`
@@ -44,6 +45,7 @@ This is a list of all tags that can be used properly with [5e.tools](https://5e.
 `@filter`
 `@footnote`
 `@hazard`
+`@h`
 `@hit`
 `@homebrew`
 `@i`
@@ -72,7 +74,7 @@ This is a list of all tags that can be used properly with [5e.tools](https://5e.
 `@variantrule`
 `@vehicle`
 
-retrieved by copy-pasting the [5e.tools renderer demo](https://5e.tools/renderdemo.html) into `rendererDemo.txt` and running this bash command:
+retrieved by copy-pasting the [5e.tools renderer demo](https://5e.tools/renderdemo.html) into `rendererDemo.txt` and running this bash command (which for some reason misses out on `@area` and `@h`):
 
 ```bash
 cat rendererDemo.txt | grep -o -e "@[^ |^}|^.]*" | sort -u

@@ -2,12 +2,14 @@
 
 A simple extension that changes the color of "tags" used for creating content for [5e.tools](https://5e.tools). A tag takes one of the following forms:
 
+-   `{@tag}`
 -   `{@tag content}`
 -   `{@tag content}*`
 -   `{@tag content|source}`
 -   `{@tag content|source}*`
 -   `{@tag content|source|chapter}`
 -   `{@tag content|source|chapter}*`
+-   ...and so forth
 
 ## Examples
 

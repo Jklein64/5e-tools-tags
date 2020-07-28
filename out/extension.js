@@ -22,7 +22,7 @@ function activate(context) {
     const contentType = createType(colors.content);
     const sourceType = createType(colors.sources);
     const asteriskType = createType(colors.asterisks);
-    const matchRegEx = new RegExp(`\\{(${tagsList.join('|')})[^}]*\\}\\**`, 'g');
+    const matchRegEx = new RegExp(`\\{(${tagsList.join('|')})(\\s|\\})[^}]*\\}\\**`, 'g');
     const asteriskRegEx = /(\*)+/g;
     const braceOrPipeRegEx = /\{|\||\}/g;
     const tagsRegEx = /@[a-z|A-Z|0-9]*/g;

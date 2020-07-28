@@ -3,7 +3,7 @@
     "displayName": "5e.tools Tags",
     "description": "Styles tags compatible with 5e.tools JSON.",
     "icon": "images/5e-tools-logo.png",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "publisher": "Tree",
     "license": "MIT",
     "engines": {

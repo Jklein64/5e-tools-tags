@@ -49,14 +49,13 @@ export function activate(context: vscode.ExtensionContext) {
     const asteriskType = createType(colors.asterisks);
 
     const tags = tagsList.join('|');
-    const openBrackets = openBracketConfig.join('|');
-    const closeBrackets = closeBracketConfig.join('|');
-
+    const openBrackets = openBracketConfig.map((s) => `(${s})`).join('|');
+    const closeBrackets = closeBracketConfig.map((s) => `(${s})`).join('|');
     const matchRegEx = new RegExp(
         `(${openBrackets})(${tags})(\\s|(${closeBrackets}))[^${closeBrackets.replace(
             /[|\\]/,
             ''
-        )}]*(${closeBrackets})\\**`,
+        )}]*(${closeBrackets})*\\**`,
         'g'
     );
 

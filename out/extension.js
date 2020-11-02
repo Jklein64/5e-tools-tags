@@ -33,9 +33,9 @@ function activate(context) {
     const sourceType = createType(colors.sources);
     const asteriskType = createType(colors.asterisks);
     const tags = tagsList.join('|');
-    const openBrackets = openBracketConfig.join('|');
-    const closeBrackets = closeBracketConfig.join('|');
-    const matchRegEx = new RegExp(`(${openBrackets})(${tags})(\\s|(${closeBrackets}))[^${closeBrackets.replace(/[|\\]/, '')}]*(${closeBrackets})\\**`, 'g');
+    const openBrackets = openBracketConfig.map((s) => `(${s})`).join('|');
+    const closeBrackets = closeBracketConfig.map((s) => `(${s})`).join('|');
+    const matchRegEx = new RegExp(`(${openBrackets})(${tags})(\\s|(${closeBrackets}))[^${closeBrackets.replace(/[|\\]/, '')}]*(${closeBrackets})*\\**`, 'g');
     const asteriskRegEx = /(\*)+/g;
     const braceOrPipeRegEx = new RegExp(String.raw `(${openBrackets})|\||(${closeBrackets})`, 'g');
     const tagsRegEx = /@[a-z|A-Z|0-9]*/g;

@@ -48,6 +48,33 @@
                         "json"
                     ],
                     "description": "The IDs of the languages to highlight the tags for."
+                },
+                "5e-tools-tags.brackets": {
+                    "type": "object",
+                    "properties": {
+                        "open": {
+                            "type": "array"
+                        },
+                        "close": {
+                            "type": "array"
+                        }
+                    },
+                    "default": {
+                        "open": [
+                            "{"
+                        ],
+                        "close": [
+                            "}"
+                        ]
+                    },
+                    "description": "The braces to surround the tags.  This is an option so that you can use YAML and not conflict with {}."
+                },
+                "5e-tools-tags.extensions": {
+                    "type": "array",
+                    "default": [
+                        ".json"
+                    ],
+                    "description": "A list of file extensions to decorate, so that not all JSON files are treated the same.  Works well in combination with editor.fileAssociations, which would let you use a '.5e' extension and map it to behave like json."
                 }
             }
         }

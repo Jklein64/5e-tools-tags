@@ -15,9 +15,23 @@ export function activate(context: vscode.ExtensionContext) {
 
     let colors = vscode.workspace.getConfiguration().get<colorsConfig>('5e-tools-tags.colors');
 
+    const {
+        open: openBracketConfig,
+        close: closeBracketConfig,
+    } = vscode.workspace
+        .getConfiguration()
+        .get<{ open: string[]; close: string[] }>('5e-tools-tags.brackets') ?? {
+        open: ['{'],
+        close: ['}'],
+    };
+
     const languages = vscode.workspace
         .getConfiguration()
         .get<string[]>('5e-tools-tags.languageIDs');
+
+    const extensions = vscode.workspace
+        .getConfiguration()
+        .get<string[]>('5e-tools-tags.extensions') ?? ['.json'];
 
     if (!colors)
         colors = {
@@ -34,9 +48,20 @@ export function activate(context: vscode.ExtensionContext) {
     const sourceType = createType(colors.sources);
     const asteriskType = createType(colors.asterisks);
 
-    const matchRegEx = new RegExp(`\\{(${tagsList.join('|')})(\\s|\\})[^}]*\\}\\**`, 'g');
+    const tags = tagsList.join('|');
+    const openBrackets = openBracketConfig.join('|');
+    const closeBrackets = closeBracketConfig.join('|');
+
+    const matchRegEx = new RegExp(
+        `(${openBrackets})(${tags})(\\s|(${closeBrackets}))[^${closeBrackets.replace(
+            /[|\\]/,
+            ''
+        )}]*(${closeBrackets})\\**`,
+        'g'
+    );
+
     const asteriskRegEx = /(\*)+/g;
-    const braceOrPipeRegEx = /\{|\||\}/g;
+    const braceOrPipeRegEx = new RegExp(String.raw`(${openBrackets})|\||(${closeBrackets})`, 'g');
     const tagsRegEx = /@[a-z|A-Z|0-9]*/g;
     const contentRegEx = /(?<=@[a-z|A-Z|0-9]*\s)[^|^}]*/g;
     const sourcesRegEx = /(?<=\|)[^}|^|]*/g;
@@ -45,6 +70,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     function updateDecorations() {
         if (!activeEditor) {
+            return;
+        }
+
+        const filename = activeEditor.document.fileName;
+        const extension = filename.substring(filename.lastIndexOf('.'));
+
+        if (!extensions.includes(extension)) {
             return;
         }
 

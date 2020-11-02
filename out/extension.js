@@ -4,11 +4,21 @@ exports.activate = void 0;
 const vscode = require("vscode");
 const tagsList = require("./tags.json");
 function activate(context) {
+    var _a, _b;
     let timeout = undefined;
     let colors = vscode.workspace.getConfiguration().get('5e-tools-tags.colors');
+    const { open: openBracketConfig, close: closeBracketConfig, } = (_a = vscode.workspace
+        .getConfiguration()
+        .get('5e-tools-tags.brackets')) !== null && _a !== void 0 ? _a : {
+        open: ['{'],
+        close: ['}'],
+    };
     const languages = vscode.workspace
         .getConfiguration()
         .get('5e-tools-tags.languageIDs');
+    const extensions = (_b = vscode.workspace
+        .getConfiguration()
+        .get('5e-tools-tags.extensions')) !== null && _b !== void 0 ? _b : ['.json'];
     if (!colors)
         colors = {
             asterisks: '#56B6C2',
@@ -22,15 +32,23 @@ function activate(context) {
     const contentType = createType(colors.content);
     const sourceType = createType(colors.sources);
     const asteriskType = createType(colors.asterisks);
-    const matchRegEx = new RegExp(`\\{(${tagsList.join('|')})(\\s|\\})[^}]*\\}\\**`, 'g');
+    const tags = tagsList.join('|');
+    const openBrackets = openBracketConfig.join('|');
+    const closeBrackets = closeBracketConfig.join('|');
+    const matchRegEx = new RegExp(`(${openBrackets})(${tags})(\\s|(${closeBrackets}))[^${closeBrackets.replace(/[|\\]/, '')}]*(${closeBrackets})\\**`, 'g');
     const asteriskRegEx = /(\*)+/g;
-    const braceOrPipeRegEx = /\{|\||\}/g;
+    const braceOrPipeRegEx = new RegExp(String.raw `(${openBrackets})|\||(${closeBrackets})`, 'g');
     const tagsRegEx = /@[a-z|A-Z|0-9]*/g;
     const contentRegEx = /(?<=@[a-z|A-Z|0-9]*\s)[^|^}]*/g;
     const sourcesRegEx = /(?<=\|)[^}|^|]*/g;
     let activeEditor = vscode.window.activeTextEditor;
     function updateDecorations() {
         if (!activeEditor) {
+            return;
+        }
+        const filename = activeEditor.document.fileName;
+        const extension = filename.substring(filename.lastIndexOf('.'));
+        if (!extensions.includes(extension)) {
             return;
         }
         // console.log(
